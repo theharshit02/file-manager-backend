@@ -6,7 +6,12 @@ const passwordSchema = mongoose.Schema({
     password: String
 })
 
+const folderSchema = mongoose.Schema({
+    name: String
+})
+
 const password = mongoose.model("Password", passwordSchema)
+const folder = mongoose.model("Folder", folderSchema)
 
 route.get("/status", function(req, res){
     password.find(function(err, result){
@@ -18,7 +23,6 @@ route.get("/status", function(req, res){
                 res.send("0")
             }
             else{
-                console.log(result);
                 res.send("1")
             }
         }
@@ -61,6 +65,19 @@ route.get("/checkPin/:pass", function(req, res){
             });
             // console.log(result);
         }
+    })
+})
+
+route.post("/folderName/:name", async function(req, res){
+    var newFolder = new folder({
+        name: req.params.name
+    })
+    await newFolder.save()
+})
+
+route.get("/listFolder", function(req, res){
+    folder.find(function(err, result){
+        res.send(result)
     })
 })
 
