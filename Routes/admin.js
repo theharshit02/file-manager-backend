@@ -7,7 +7,11 @@ const passwordSchema = mongoose.Schema({
 })
 
 const folderSchema = mongoose.Schema({
-    name: String
+    name: String,
+    files: [{
+        fname: String,
+        fcontent: String
+    }]
 })
 
 const password = mongoose.model("Password", passwordSchema)
@@ -79,6 +83,38 @@ route.get("/listFolder", function(req, res){
     folder.find(function(err, result){
         res.send(result)
     })
+})
+
+route.post("/file/:foldername", function(req, res){
+    folder.find({name: req.params.foldername}, async function(err, result){
+        if(err){
+            console.log(err);
+        }
+        else{
+            console.log("before", result);
+            var newobj = {
+                fname: req.query.fname,
+                fcontent: req.query.fcontent
+            }
+            await folder.updateOne({name: req.params.foldername}, {$push: {files: [newobj]}})
+            console.log("After", result);
+        }
+    })
+})
+
+route.get("/getFiles/:foldername", function(req, res){
+    folder.find({name: req.params.foldername}, async function(err,result){
+        if(err){
+            console.log(err);
+        }
+        else{
+            res.send(result)
+        }
+    })
+})
+
+route.post("/updateContent/:foldername/:filename/:content", async function(req, res){
+    await folder.updateOne({name: req.params.foldername, "files.fname": req.params.filename}, {"files.$.fcontent": req.params.content})
 })
 
 module.exports = route;
