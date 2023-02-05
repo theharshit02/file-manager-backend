@@ -91,13 +91,11 @@ route.post("/file/:foldername", function(req, res){
             console.log(err);
         }
         else{
-            console.log("before", result);
             var newobj = {
                 fname: req.query.fname,
-                fcontent: req.query.fcontent
+                fcontent: ""
             }
             await folder.updateOne({name: req.params.foldername}, {$push: {files: [newobj]}})
-            console.log("After", result);
         }
     })
 })
