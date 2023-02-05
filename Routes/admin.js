@@ -117,4 +117,39 @@ route.post("/updateContent/:foldername/:filename/:content", async function(req, 
     await folder.updateOne({name: req.params.foldername, "files.fname": req.params.filename}, {"files.$.fcontent": req.params.content})
 })
 
+route.get("/searchFiles/:searchText", function(req, res){
+
+    const filename = []
+    const searched =[]
+    folder.find(function(err, result){
+        if(err){
+            console.log(err)
+        }
+        else{
+            result.forEach((items)=>{
+                const x = items.files
+                x.forEach((i)=>{
+                    filename.push(i.fname)
+                })
+            })
+            filename.find((element)=>{
+                if(element.includes(req.params.searchText)){
+                    searched.push(element)
+                }
+            })
+            res.send(searched)
+        }
+    })
+})
+
+route.get("/autoSelect/:filename", function(req, res){
+    folder.find({files: [{fname: {$in: [req.params.filename]}}]}, function(err, result){
+        if(err){
+            console.log(err)
+        }
+        else{
+            res.send(result)
+        }
+    })
+})
 module.exports = route;
