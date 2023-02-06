@@ -9,6 +9,9 @@ const admin = require("./Routes/admin")
 app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}));
 
+const port = process.env.PORT
+const host = process.env.HOST
+
 mongoose.connect(`${process.env.mongodb}/fileManager`)
 
 app.get("/api/health", function(req, res){
@@ -17,11 +20,11 @@ app.get("/api/health", function(req, res){
 
 app.use("/api/admin", admin)
 
-app.listen(process.env.PORT, function(err){
+app.listen(port, function(err){
     if(err){
         console.log(err);
     }
     else{
-        console.log(`Listening on ${process.env.HOST}:${process.env.PORT}`);
+        console.log(`Listening on ${host}:${port}`);
     }
 })
