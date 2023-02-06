@@ -125,13 +125,14 @@ route.get("/searchFiles/:searchText", function(req, res){
         }
         else{
             result.forEach((items)=>{
+                console.log(items)
                 const x = items.files
                 x.forEach((i)=>{
                     filename.push(i.fname)
                 })
             })
             filename.find((element)=>{
-                if(element.includes(req.params.searchText)){
+                if(element.toLowerCase().includes((req.params.searchText).toLowerCase())){
                     searched.push(element)
                 }
             })
