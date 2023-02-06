@@ -9,8 +9,8 @@ const admin = require("./Routes/admin")
 app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}));
 
-const port = process.env.PORT
-const host = process.env.HOST
+const port = process.env.PORT || 3000
+const host = process.env.HOST || "localhost"
 
 mongoose.connect(`${process.env.mongodb}/fileManager`)
 
