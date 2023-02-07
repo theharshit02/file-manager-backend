@@ -67,7 +67,6 @@ route.get("/checkPin/:pass", function(req, res){
                     res.send("1")
                 }
             });
-            // console.log(result);
         }
     })
 })
@@ -125,7 +124,6 @@ route.get("/searchFiles/:searchText", function(req, res){
         }
         else{
             result.forEach((items)=>{
-                console.log(items.files)
                 const x = items.files
                 x.forEach((i)=>{
                     filename.push(i.fname)
@@ -142,23 +140,12 @@ route.get("/searchFiles/:searchText", function(req, res){
 })
 
 route.get("/autoSelect/:filename", function(req, res){
-    // const filename = req.params.filename
-    // folder.find({files: {fname: {filename}}}, function(err, result){
-    //     if(err){
-    //         console.log(err)
-    //     }
-    //     else{
-    //         res.send(result)
-    //     }
-    // })
-
     const x = folder.aggregate([ { $unwind : "$files" } ], function(err, result){
         if(err){
             console.log(err)
         }
         else{
             result.map((i)=>{
-                console.log(i)
                 if(i.files.fname === req.params.filename){
                     res.send({foldname: i.name, filename: i.files.fname, filecontent: i.files.fcontent})
                 }
